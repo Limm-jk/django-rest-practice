@@ -1,5 +1,11 @@
 from django.urls import path, include
-from .views import article_list, article_detail, ArticleAPIView, ArticleDetails, GenericAPIViews
+
+from rest_framework.routers import DefaultRouter
+
+from .views import article_list, article_detail, ArticleAPIView, ArticleDetails, GenericAPIViews, ArticleViewSet
+
+router = DefaultRouter()
+router.register('article', ArticleViewSet, basename='article')
 
 urlpatterns = [
     # path('article/', article_list),
@@ -13,4 +19,6 @@ urlpatterns = [
     # path('detail/<int:pk>/', article_detail),
     path('detail/<int:id>/', ArticleDetails.as_view()),
     path('generic/article/<int:id>/', GenericAPIViews.as_view()),
+    path('viewset/', include(router.urls)),
+    path('viewset/<int:pk>/', include(router.urls)),
 ]
