@@ -29,3 +29,32 @@ def article_list(request):
             return JsonResponse(serializer.data, status=201)
         # invalid한 경우
         return JsonResponse(serializer.errors, status=400)
+    
+@csrf_exempt
+def article_detail(request, pk):
+    try:
+        article = Article.objects.get(pk=pk)
+        
+    except Article.DoesNotExist:
+        return HttpResponse(status=404)
+    
+    if request.method == 'GET':
+        # article's'가 아니기 때문에, many option을 빼준다.
+        serializer = ArticleSerializer(article)
+        return JsonResponse(serializer.data)
+    
+    # 업데이트를 해주는 역할을 함. 이때 pk는 변하지 않음
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = ArticleSerializer(article, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            # post가 아니기 때문에 status는 필요 없다
+            return JsonResponse(serializer.data)
+        # invalid한 경우
+        return JsonResponse(serializer.errors, status=400)
+    
+    elif request.method == 'DELETE':
+        article.delete()
+        return HttpResponse(status=204)
+        
