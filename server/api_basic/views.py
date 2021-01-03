@@ -5,11 +5,39 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics, mixins
 from rest_framework.views import APIView
 
 from .models import Article
 from .serializers import ArticleSerializer
+
+# mix in. 상속을 통해서 새로운 내용을 추가하겠어!
+class GenericAPIViews(generics.GenericAPIView, 
+                      mixins.ListModelMixin, 
+                      mixins.CreateModelMixin,
+                      mixins.UpdateModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.DestroyModelMixin):
+    serializer_class = ArticleSerializer
+    queryset = Article.objects.all()
+    
+    lookup_field = 'id'
+    
+    def get(self, request, id = None):
+        
+        if id:
+            return self.retrieve(request)
+        
+        return self.list(request)
+    
+    def post(self, request):
+        return self.create(request)
+    
+    def put(self, request, id):
+        return self.update(request, id)
+    
+    def delete(self, request, id):
+        return self.destroy(request, id)
 
 class ArticleAPIView(APIView):
     def get(self, request):
@@ -37,7 +65,7 @@ class ArticleAPIView(APIView):
 class ArticleDetails(APIView):
     def get_object(self, id):
         try:
-            return article = Article.objects.get(id=id)
+            return Article.objects.get(id=id)
         
         except Article.DoesNotExist:
             return HttpResponse(status=status.HTTP_404_NOT_FOUND)

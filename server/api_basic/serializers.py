@@ -6,6 +6,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         # fields = ['id', 'title', 'author', 'email']
+        # fields = ['id', 'title', 'author']
         # 하나하나 할 필요 없이 이걸로 한번에 다 지정이 가능하다
         fields = '__all__'
         
