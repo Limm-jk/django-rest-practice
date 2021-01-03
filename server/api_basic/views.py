@@ -14,16 +14,18 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Article
 from .serializers import ArticleSerializer
 
-
-
-class ArticleViewSet(viewsets.GenericViewSet, 
-                     mixins.ListModelMixin, 
-                     mixins.CreateModelMixin,
-                      mixins.UpdateModelMixin,
-                      mixins.RetrieveModelMixin,
-                      mixins.DestroyModelMixin):
+class ArticleViewSet(viewsets.ModelViewSet):
     serializer_class = ArticleSerializer
     queryset = Article.objects.all()
+
+# class ArticleViewSet(viewsets.GenericViewSet, 
+#                      mixins.ListModelMixin, 
+#                      mixins.CreateModelMixin,
+#                       mixins.UpdateModelMixin,
+#                       mixins.RetrieveModelMixin,
+#                       mixins.DestroyModelMixin):
+#     serializer_class = ArticleSerializer
+#     queryset = Article.objects.all()
 
 # # 다양한 view에서 정의한 기능들을 담고있는 set
 # # 뭐야 개사기잖아? 내 100줄 돌려줘
