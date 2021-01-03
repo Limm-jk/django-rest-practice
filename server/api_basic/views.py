@@ -14,46 +14,57 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Article
 from .serializers import ArticleSerializer
 
-# 다양한 view에서 정의한 기능들을 담고있는 set
-# 뭐야 개사기잖아? 내 100줄 돌려줘
-class ArticleViewSet(viewsets.ViewSet):
-    def list(self, request):
-        # DB의 모든 Article들을 불러오겠다
-        articles = Article.objects.all()
-        # 그 다음에 직렬화 시켜버리겠다
-        # 쿼리셋(다수)일 경우는 many를 True로 줘야한다
-        serializer = ArticleSerializer(articles, many=True)
-        # # dict형태가 아니라면 safe에 False를 준다
-        # return JsonResponse(serializer.data, safe = False)
-        # 알아서 response의 형태를 잡아줌
-        return Response(serializer.data)
+
+
+class ArticleViewSet(viewsets.GenericViewSet, 
+                     mixins.ListModelMixin, 
+                     mixins.CreateModelMixin,
+                      mixins.UpdateModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.DestroyModelMixin):
+    serializer_class = ArticleSerializer
+    queryset = Article.objects.all()
+
+# # 다양한 view에서 정의한 기능들을 담고있는 set
+# # 뭐야 개사기잖아? 내 100줄 돌려줘
+# class ArticleViewSet(viewsets.ViewSet):
+#     def list(self, request):
+#         # DB의 모든 Article들을 불러오겠다
+#         articles = Article.objects.all()
+#         # 그 다음에 직렬화 시켜버리겠다
+#         # 쿼리셋(다수)일 경우는 many를 True로 줘야한다
+#         serializer = ArticleSerializer(articles, many=True)
+#         # # dict형태가 아니라면 safe에 False를 준다
+#         # return JsonResponse(serializer.data, safe = False)
+#         # 알아서 response의 형태를 잡아줌
+#         return Response(serializer.data)
     
-    def create(self, request):
-        serializer = ArticleSerializer(data=request.data)
+#     def create(self, request):
+#         serializer = ArticleSerializer(data=request.data)
         
-        if serializer.is_valid():
-            serializer.save()
-            # return JsonResponse(serializer.data, status=201)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        # invalid한 경우
-        # return JsonResponse(serializer.errors, status=400)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         if serializer.is_valid():
+#             serializer.save()
+#             # return JsonResponse(serializer.data, status=201)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         # invalid한 경우
+#         # return JsonResponse(serializer.errors, status=400)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def retrieve(self, request, pk=None):
-        queryset = Article.objects.all()
-        article = get_object_or_404(queryset, pk=pk)
-        serializer = ArticleSerializer(article)
-        return Response(serializer.data)
+#     def retrieve(self, request, pk=None):
+#         queryset = Article.objects.all()
+#         article = get_object_or_404(queryset, pk=pk)
+#         serializer = ArticleSerializer(article)
+#         return Response(serializer.data)
     
-    def update(self, request, pk=None):
-        article = Article.objects.get(pk=pk)
-        serializer = ArticleSerializer(article, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            # post가 아니기 때문에 status는 필요 없다
-            return Response(serializer.data)
-        # invalid한 경우
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def update(self, request, pk=None):
+#         article = Article.objects.get(pk=pk)
+#         serializer = ArticleSerializer(article, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             # post가 아니기 때문에 status는 필요 없다
+#             return Response(serializer.data)
+#         # invalid한 경우
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         
 
