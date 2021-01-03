@@ -5,7 +5,9 @@ class ArticleSerializer(serializers.ModelSerializer):
     # 어떤 모델로 만드는지, 어떤 필드를 사용하는 지 정보 제공
     class Meta:
         model = Article
-        fields = ['id', 'title', 'author']
+        # fields = ['id', 'title', 'author', 'email']
+        # 하나하나 할 필요 없이 이걸로 한번에 다 지정이 가능하다
+        fields = '__all__'
         
 
 
