@@ -1,11 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework.parsers import JSONParser
 
 from .models import Article
 from .serializers import ArticleSerializer
 
+# rest framework는 sensetive해서 이런 걸 달아줘야 한다
+@csrf_exempt
 def article_list(request):
     if request.method == 'GET':
         # DB의 모든 Article들을 불러오겠다
