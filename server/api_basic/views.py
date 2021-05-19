@@ -69,7 +69,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 ## hello this is commnet 
-
+## change by data
 
 ## new line
 
