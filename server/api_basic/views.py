@@ -68,7 +68,10 @@ class ArticleViewSet(viewsets.ModelViewSet):
 #         # invalid한 경우
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        
+## hello this is commnet 
+
+
+## new line
 
 # mix in. 상속을 통해서 새로운 내용을 추가하겠어!
 class GenericAPIViews(generics.GenericAPIView, 
